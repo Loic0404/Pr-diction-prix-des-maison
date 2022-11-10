@@ -15,12 +15,18 @@ import streamlit as st
 pickle_in = open("model.pkl", "rb")
 model = pickle.load(pickle_in)
 
+# Création du titre
+
 st.title("Prédiction immobilière")
+
+# Création d'une liste contenant tous les départements
 
 zipcode_source = [98001, 98002 ,98003, 98004, 98005, 98006, 98007, 98008, 98010, 98011, 98014, 98019, 98022, 98023, 98024, 98027, 98028, 98029, 98030, 98031, 
 98032, 98033, 98034, 98038, 98039, 98040, 98042, 98045, 98052, 98053, 98055, 98056, 98058, 98059, 98065, 98070, 98072, 98074, 98075, 98077, 98092, 98102, 
 98103, 98105, 98106, 98107, 98108, 98109, 98112, 98115, 98116, 98117, 98118, 98119, 98122, 98125, 98126, 98133, 98136, 98144, 98146, 98148, 98155, 98166, 
 98168, 98177, 98178, 98188, 98198, 98199]
+
+# Création des élements pour que l'utilisateur entre ses informations
 
 bedrooms = st.slider('Nombres de chambres :', min_value = 0 , max_value= 20, step = 1 )
 bathrooms = st.slider ('Nombres de salle de bain :', min_value = 0 , max_value = 8, step = 1)
@@ -41,7 +47,7 @@ yr_build = st.slider ('Année de constuction :', min_value = 1900, max_value = 2
 yr_basement = st.slider ('Année de rénovation :', min_value = 1900, max_value = 2015, step = 1)
 zipcode = st.selectbox (" Choisissez le code postal :" , zipcode_source)
 
-
+# Création d'un dictionnaire pour les choix en cours
 
 choix_en_cours = {
     "bedrooms": bedrooms,
@@ -58,12 +64,16 @@ choix_en_cours = {
     "yr_build": yr_build,
     "yr_basement": yr_basement
 }
+
+# Pour récupérer le code postal
 for code in zipcode_source:
     choix_en_cours[code] = 0
 choix_en_cours[zipcode] = 1
 
 choix_en_cours = [choix_en_cours[cle] for cle in choix_en_cours]
 choix_en_cours = model.predict([choix_en_cours])
+
+# Création du boutton pour que l'utilsateur valide ses choix
 
 if st.button('Calcul'):
     st.success(choix_en_cours[0])
